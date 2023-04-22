@@ -15,8 +15,8 @@ if __name__ == '__main__':
     # out_vector = 'w2v_50.vector'
     # train_word2vec(dataset_path, out_vector)
 
-    w2v_model = load_word2vec_model("word2vec.model")  # 加载w2v模型
-    print("加载w2v模型成功！")
+    # w2v_model = load_word2vec_model("word2vec.model")  # 加载w2v模型
+    # print("加载w2v模型成功！")
     # glove_model = KeyedVectors.load("glove_embedding")  # 加载glove模型
     # print("加载w2v模型成功！")
     #
@@ -99,5 +99,6 @@ if __name__ == '__main__':
 
     # glove_to_w2v("E:\\Projects\\w2v\\w2v_vector_hard.txt","word2vec_embedding_hard_debias")
 
-    w2v_sdp(w2v_model)
+    w2v_model_50 = load_word2vec_model("word2vec_50.model")  # 加载w2v模型
+    w2v_sdp(w2v_model_50)
     # sdp_test()

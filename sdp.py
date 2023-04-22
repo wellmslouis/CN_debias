@@ -8,7 +8,7 @@ def w2v_svd(w2v_model):
     w2v_vectors = w2v_model.wv.vectors
     w2v_vectors_unit=[]
     #将每个向量单位化
-    for i in range(50000):
+    for i in range(116180):
         w2v_vectors_unit.append(unit_word(w2v_vectors[i]))
 
     W_T=np.array(w2v_vectors_unit)#输出矩阵维度是97w*300
@@ -58,26 +58,27 @@ def rSVD(w2v_model,r,q=0,p=0):
 
 def w2v_sdp(w2v_model):
     # U,Z,V=w2v_svd(w2v_model)
-    U,Z,V=rSVD(w2v_model,300)
+    U,Z,V=rSVD(w2v_model,50)
     print("--------------------------SVD完成")
     U_T=U.T
     A=Z*U_T
     C=U*Z
 
     N_T_list=[]
-    with open("no_sex_final.txt",encoding='utf-8') as f_n:
+    with open("no_sex.txt",encoding='utf-8') as f_n:
         for i in f_n:
             word=i.replace("\n","")
             try:
                 N_T_list.append(unit_word(w2v_model.wv[word]))
             except:
                 print(word+"不存在")
+    print("性别中性词数量"+str(len(N_T_list)))
     N_T=np.array(N_T_list)
 
     B_T= np.array(identify_gender_subspace(w2v_model))
     B=B_T.T#300*1
 
-    X=cp.Variable((300,300))
+    X=cp.Variable((50,50))
     term_1=cp.norm((A @ X - A) @ C,p='fro')
     term_2=cp.norm(N_T @ (X @ B),p='fro')
     constraints = [X >> 0]
@@ -93,9 +94,11 @@ def w2v_sdp(w2v_model):
     print(X.value)
 
     with open("x.txt","w",encoding='utf-8') as f_x:
-        for i in range(300):
-            for j in range(300):
+        for i in range(50):
+            for j in range(50):
                 f_x.write(X.value[i][j])
+                f_x.write(" ")
+            f_x.write("\n")
 
 def sdp_test():
 

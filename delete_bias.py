@@ -11,10 +11,13 @@ def identify_gender_subspace(w2v_model):
     with open("sex_team.txt", encoding='utf-8') as f:
         for i in f:
             if num>1:
-                a = i.split(" ")
-                for j in range(len(a)):
-                    a[j]=a[j].replace("\n","")
-                B+=vector_between_2_unit_words(w2v_model,a[0],a[1])
+                try:
+                    a = i.split(" ")
+                    for j in range(len(a)):
+                        a[j]=a[j].replace("\n","")
+                    B+=vector_between_2_unit_words(w2v_model,a[0],a[1])
+                except:
+                    print(a[0]+" "+a[1]+"不存在")
             else:
                 num+=1
     B/=num
